@@ -25,9 +25,9 @@ def animate(i, jlink, memory_address, xs, ys, interval):
 def counter_viewer(device, address, intervalMs):
     """Polls the content of the counter variable at address address.
     Args:
-      jlink_serial (str): the J-Link serial number
       device (str): the target CPU
       address: the address of the uint32_t counter variable in hex
+      interval: the polling interval in milliseconds
 
     Returns:
       Always returns ``0``.
