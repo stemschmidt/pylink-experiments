@@ -20,6 +20,7 @@ def animate(i, jlink, memory_address, xs, ys, interval):
     yslist = list(ys)
 
     ax1.clear()
+    ax1.set_ylim(top=60, bottom=-10)
     ax1.plot(xslist, yslist)
 
 def counter_viewer(device, address, intervalMs):
@@ -35,21 +36,23 @@ def counter_viewer(device, address, intervalMs):
     Raises:
       JLinkException: on error
     """
-    jlink = pylink.JLink()
-    jlink.open()
-    jlink.set_tif(pylink.enums.JLinkInterfaces.SWD)
-    jlink.connect(device, verbose=True)
+    try:
+      jlink = pylink.JLink()
+      jlink.open()
+      jlink.set_tif(pylink.enums.JLinkInterfaces.SWD)
+      jlink.connect(device, verbose=True)
 
-    memory_address = int(address, 16)
-    polling_interval = int(intervalMs, 10)
+      memory_address = int(address, 16)
+      polling_interval = int(intervalMs, 10)
 
-    xs = deque(maxlen=100)
-    ys = deque(maxlen=100)
+      xs = deque(maxlen=100)
+      ys = deque(maxlen=100)
 
-    ani = animation.FuncAnimation(fig, partial(animate, jlink=jlink, memory_address=memory_address, 
-                                  xs=xs, ys=ys, interval=polling_interval), interval=polling_interval, cache_frame_data=False)
-    plt.show()
-
+      ani = animation.FuncAnimation(fig, partial(animate, jlink=jlink, memory_address=memory_address,
+                                    xs=xs, ys=ys, interval=polling_interval), interval=polling_interval, cache_frame_data=False)
+      plt.show()
+    except:
+      input("Press Enter to exit...")
 
 if __name__ == '__main__':
     counter_viewer(sys.argv[1], sys.argv[2], sys.argv[3])
